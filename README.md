@@ -1,10 +1,20 @@
 # Personal Portfolio / Resume Framework — Showcase Carousel
 
-A **slideshow of complete portfolio/resume website examples** across different careers.
-Visitors arrow through finished examples (designer, photographer, marketer, architect,
-engineer) — each a full portfolio with its own person, theme colour, work samples, résumé,
-and contact. Perfect as a sales showcase: a prospect flips through to see the style they
-want built for them.
+A **slideshow of 10 complete portfolio/resume website examples** across different careers
+(product designer, software engineer, wedding photographer, marketing strategist, architect,
+registered nurse, music producer, private chef, writer/editor, fitness coach). Each example
+is a full portfolio with its own person, work samples, résumé, and contact — and, crucially,
+its own **visual style** (see below), so they look genuinely different, not just recoloured.
+Perfect as a sales showcase: a prospect flips through to find the look they want built.
+
+### Visual styles
+Each preset picks a `style` that swaps the whole aesthetic + layout:
+- **editorial** — light, elegant, serif headings (designer)
+- **noir** — dark mode, bold uppercase, neon accent + offset glow (engineer, producer)
+- **warm** — cream, rounded, organic blob portrait, friendly type (photographer, chef)
+- **bold** — brutalist: huge uppercase type, sharp corners, offset shadows (marketer, coach)
+- **minimal** — airy, flat, mono labels, centered round-portrait hero (architect, writer)
+- **classic** — formal résumé: serif, portrait-left header, underlined headings (nurse)
 
 Pure HTML/CSS/JS, no build step, hosts free on GitHub Pages. Built on the shared
 design-system starter kit; reuses the lightbox + Pexels-image pattern from the other

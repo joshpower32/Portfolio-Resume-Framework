@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jordan Bennett — Product Designer &amp; Developer</title>
-    <meta name="description" content="Portfolio of Jordan Bennett, a product designer and developer crafting clean, useful digital experiences.">
+    <title>Portfolio &amp; Resume Showcase — Examples for every career</title>
+    <meta name="description" content="A showcase of personal portfolio and resume website examples across different careers — slide through to see styles you can have built for you.">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- ===== Header / Nav ===== -->
     <header class="site-header" id="top">
         <div class="wrap nav">
-            <a href="#top" class="brand">Jordan&nbsp;Bennett<span class="brand-dot">.</span></a>
+            <a href="#top" class="brand" id="brandName">Name<span class="brand-dot">.</span></a>
             <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">&#9776;</button>
             <nav class="nav-links" id="navLinks" aria-label="Primary">
                 <a href="#about">About</a>
@@ -23,118 +23,121 @@
         </div>
     </header>
 
-    <!-- ===== Hero ===== -->
-    <section class="hero">
-        <div class="wrap hero-grid">
-            <div class="hero-text">
-                <p class="eyebrow">Hello, I’m</p>
-                <h1>Jordan Bennett</h1>
-                <p class="role">Product Designer &amp; Developer</p>
-                <p class="lede">I craft clean, useful digital experiences — from first sketch to shipped product. Currently freelancing and open to new projects.</p>
-                <div class="hero-actions">
-                    <a class="btn btn-primary" href="#work">View my work</a>
-                    <a class="btn btn-ghost" href="#contact">Get in touch</a>
+    <!-- ===== Carousel control bar ===== -->
+    <div class="showcase-bar">
+        <div class="wrap showcase-inner">
+            <button class="sc-arrow" id="scPrev" aria-label="Previous example">&#8249;</button>
+            <div class="sc-meta">
+                <span class="sc-kicker">Portfolio example <b id="scIndex">1</b> / <span id="scTotal">5</span></span>
+                <strong class="sc-label" id="scLabel">Career</strong>
+            </div>
+            <button class="sc-arrow" id="scNext" aria-label="Next example">&#8250;</button>
+            <div class="sc-dots" id="scDots" role="tablist" aria-label="Choose an example"></div>
+        </div>
+    </div>
+
+    <!-- Big side arrows (slideshow feel) -->
+    <button class="edge-arrow edge-prev" id="edgePrev" aria-label="Previous example">&#8249;</button>
+    <button class="edge-arrow edge-next" id="edgeNext" aria-label="Next example">&#8250;</button>
+
+    <!-- ===== Stage (everything that changes per example) ===== -->
+    <main id="stage" class="stage">
+        <!-- Hero -->
+        <section class="hero">
+            <div class="wrap hero-grid">
+                <div class="hero-text">
+                    <p class="eyebrow">Hello, I’m</p>
+                    <h1 id="pName">Name</h1>
+                    <p class="role" id="pRole">Role</p>
+                    <p class="lede" id="pLede">Lede</p>
+                    <div class="hero-actions">
+                        <a class="btn btn-primary" href="#work">View my work</a>
+                        <a class="btn btn-ghost" href="#contact">Get in touch</a>
+                    </div>
+                    <div class="socials" aria-label="Social links">
+                        <a href="#" aria-label="LinkedIn">in</a>
+                        <a href="#" aria-label="Portfolio">pf</a>
+                        <a href="#" aria-label="Instagram">ig</a>
+                        <a href="#" aria-label="Email" id="pEmailIcon">@</a>
+                    </div>
                 </div>
-                <div class="socials" aria-label="Social links">
-                    <a href="#" aria-label="LinkedIn">in</a>
-                    <a href="#" aria-label="GitHub">gh</a>
-                    <a href="#" aria-label="Instagram">ig</a>
-                    <a href="mailto:hello@jordanbennett.example" aria-label="Email">@</a>
+                <div class="hero-portrait" id="heroPortrait" aria-hidden="true"></div>
+            </div>
+        </section>
+
+        <!-- About + stats + skills -->
+        <section id="about" class="section">
+            <div class="wrap about-grid">
+                <div id="pAbout"><h2>About me</h2></div>
+                <div class="stats" id="pStats"></div>
+            </div>
+            <div class="wrap skills">
+                <h3>What I do</h3>
+                <ul class="skill-tags" id="pSkills"></ul>
+            </div>
+        </section>
+
+        <!-- Work -->
+        <section id="work" class="section section-tint">
+            <div class="wrap">
+                <div class="section-head">
+                    <h2>Selected work</h2>
+                    <p>A few recent projects. Click any to take a closer look.</p>
                 </div>
+                <div class="filters" id="workFilters" role="tablist" aria-label="Work categories"></div>
+                <div class="work-grid" id="workGrid"></div>
             </div>
-            <div class="hero-portrait" id="heroPortrait" aria-hidden="true"></div>
-        </div>
-    </section>
+        </section>
 
-    <!-- ===== About + stats ===== -->
-    <section id="about" class="section">
-        <div class="wrap about-grid">
-            <div>
-                <h2>About me</h2>
-                <p>I’m a designer-developer hybrid with eight years of experience building products people actually enjoy using. I care about the details — clear typography, thoughtful interactions, and interfaces that get out of the way.</p>
-                <p>When I’m not designing, you’ll find me sketching, shooting film photography, or exploring the city for the best coffee.</p>
+        <!-- Resume / Experience -->
+        <section id="resume" class="section">
+            <div class="wrap resume-wrap">
+                <div class="section-head section-head--left">
+                    <h2>Experience</h2>
+                    <p>A snapshot of my background.</p>
+                </div>
+                <ol class="timeline" id="pTimeline"></ol>
             </div>
-            <div class="stats">
-                <div class="stat"><b>8+</b><small>Years experience</small></div>
-                <div class="stat"><b>40+</b><small>Projects shipped</small></div>
-                <div class="stat"><b>20+</b><small>Happy clients</small></div>
-            </div>
-        </div>
-        <div class="wrap skills">
-            <h3>What I do</h3>
-            <ul class="skill-tags">
-                <li>Product Design</li><li>UI / UX</li><li>Design Systems</li><li>Prototyping</li>
-                <li>Front-End Dev</li><li>HTML / CSS / JS</li><li>Webflow</li><li>Brand &amp; Identity</li>
-                <li>User Research</li><li>Accessibility</li>
-            </ul>
-        </div>
-    </section>
+        </section>
 
-    <!-- ===== Work ===== -->
-    <section id="work" class="section section-tint">
-        <div class="wrap">
-            <div class="section-head">
-                <h2>Selected work</h2>
-                <p>A few recent projects. Click any to take a closer look.</p>
+        <!-- Testimonial -->
+        <section class="section section-quote">
+            <div class="wrap">
+                <blockquote class="big-quote" id="pQuote">Quote</blockquote>
+                <p class="quote-by" id="pQuoteBy">— Someone</p>
             </div>
-            <div class="filters" id="workFilters" role="tablist" aria-label="Work categories"></div>
-            <div class="work-grid" id="workGrid"></div>
-        </div>
-    </section>
+        </section>
 
-    <!-- ===== Resume / Experience ===== -->
-    <section id="resume" class="section">
-        <div class="wrap resume-wrap">
-            <div class="section-head section-head--left">
-                <h2>Experience</h2>
-                <p>A snapshot of where I’ve worked.</p>
+        <!-- Contact -->
+        <section id="contact" class="section">
+            <div class="wrap contact-grid">
+                <div>
+                    <h2>Let’s work together</h2>
+                    <p id="pContactBlurb">Blurb</p>
+                    <p class="contact-direct" id="pContactDirect"></p>
+                </div>
+                <form class="contact-form" id="contactForm">
+                    <div class="field"><label>Name<input name="name" required></label></div>
+                    <div class="field"><label>Email<input type="email" name="email" required></label></div>
+                    <div class="field"><label>Message<textarea name="message" rows="4" required></textarea></label></div>
+                    <button type="submit" class="btn btn-primary btn-block">Send message</button>
+                    <p class="fineprint" id="contactNote">Demo form — submissions aren’t sent yet. See the README to wire it to email or Firebase.</p>
+                </form>
             </div>
-            <ol class="timeline">
-                <li><div class="tl-date">2022 — Present</div><div class="tl-body"><h3>Freelance Product Designer &amp; Developer</h3><span class="tl-org">Self-employed</span><p>Designing and building websites and product interfaces for startups and small businesses.</p></div></li>
-                <li><div class="tl-date">2019 — 2022</div><div class="tl-body"><h3>Senior Product Designer</h3><span class="tl-org">Northwind Labs</span><p>Led design on a B2B SaaS platform; built and maintained the design system.</p></div></li>
-                <li><div class="tl-date">2016 — 2019</div><div class="tl-body"><h3>UI Designer &amp; Front-End Developer</h3><span class="tl-org">Brightside Studio</span><p>Designed and shipped marketing sites and web apps for agency clients.</p></div></li>
-                <li><div class="tl-date">2016</div><div class="tl-body"><h3>B.Des, Interaction Design</h3><span class="tl-org">OCAD University</span><p>Graduated with honours; focus on human-centred design.</p></div></li>
-            </ol>
-        </div>
-    </section>
-
-    <!-- ===== Testimonial ===== -->
-    <section class="section section-quote">
-        <div class="wrap">
-            <blockquote class="big-quote">“Jordan took our vague idea and turned it into a product our customers love. Easily the best designer we’ve worked with.”</blockquote>
-            <p class="quote-by">— Morgan Lee, Founder at Tidepool</p>
-        </div>
-    </section>
-
-    <!-- ===== Contact ===== -->
-    <section id="contact" class="section">
-        <div class="wrap contact-grid">
-            <div>
-                <h2>Let’s work together</h2>
-                <p>Have a project in mind, or just want to say hi? Drop me a line and I’ll get back to you soon.</p>
-                <p class="contact-direct"><a href="mailto:hello@jordanbennett.example">hello@jordanbennett.example</a><br>Based in Toronto · Available worldwide</p>
-            </div>
-            <form class="contact-form" id="contactForm">
-                <div class="field"><label>Name<input name="name" required></label></div>
-                <div class="field"><label>Email<input type="email" name="email" required></label></div>
-                <div class="field"><label>Message<textarea name="message" rows="4" required></textarea></label></div>
-                <button type="submit" class="btn btn-primary btn-block">Send message</button>
-                <p class="fineprint" id="contactNote">Demo form — submissions aren’t sent yet. See the README to wire it to email or Firebase.</p>
-            </form>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <!-- ===== Footer ===== -->
     <footer class="site-footer">
         <div class="wrap footer-inner">
-            <a href="#top" class="brand">Jordan&nbsp;Bennett<span class="brand-dot">.</span></a>
+            <a href="#top" class="brand" id="brandNameFooter">Name<span class="brand-dot">.</span></a>
             <div class="footer-socials">
-                <a href="#">LinkedIn</a><a href="#">GitHub</a><a href="#">Instagram</a>
-                <a href="mailto:hello@jordanbennett.example">Email</a>
+                <a href="#">LinkedIn</a><a href="#">Portfolio</a><a href="#">Instagram</a>
+                <a href="#" id="pEmailFooter">Email</a>
             </div>
         </div>
         <div class="wrap footer-bottom">
-            <small>&copy; <span id="year"></span> Jordan Bennett — Demo template by <a href="#">Your Studio</a>. Placeholder imagery via <a href="https://www.pexels.com" target="_blank" rel="noopener">Pexels</a>.</small>
+            <small>&copy; <span id="year"></span> Portfolio Showcase — Demo template by <a href="#">Your Studio</a>. Placeholder imagery via <a href="https://www.pexels.com" target="_blank" rel="noopener">Pexels</a>.</small>
         </div>
     </footer>
 

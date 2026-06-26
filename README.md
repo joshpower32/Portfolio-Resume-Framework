@@ -1,32 +1,48 @@
-# Personal Portfolio / Resume Framework — "Jordan Bennett"
+# Personal Portfolio / Resume Framework — Showcase Carousel
 
-A clean, re-skinnable **personal website** template for individuals — freelancers, job
-seekers, designers, photographers, artists, consultants — who want their own portfolio but
-can't build one. Hero with portrait, about + stats + skills, a filterable **work gallery
-with lightbox**, a **resume timeline**, testimonial, and contact form. Pure HTML/CSS/JS, no
-build step, hosts free on GitHub Pages.
+A **slideshow of complete portfolio/resume website examples** across different careers.
+Visitors arrow through finished examples (designer, photographer, marketer, architect,
+engineer) — each a full portfolio with its own person, theme colour, work samples, résumé,
+and contact. Perfect as a sales showcase: a prospect flips through to see the style they
+want built for them.
 
-Built on the shared design-system starter kit, re-skinned editorial/elegant (off-white +
-indigo, serif headings). Reuses the lightbox + Pexels-image pattern from the other frameworks.
+Pure HTML/CSS/JS, no build step, hosts free on GitHub Pages. Built on the shared
+design-system starter kit; reuses the lightbox + Pexels-image pattern from the other
+frameworks.
 
-## Personalising for a client
+## How the carousel works
 
-1. **Identity & copy** — name, role, bio, stats, skills, experience timeline, testimonial,
-   and contact info all live in `index.html`.
-2. **Brand & colours** — edit the `:root` tokens in `styles.css` (`--brand`, fonts).
-3. **Work projects** — edit the `WORK` array in `app.js` (title, category, Pexels `query`).
-4. **Real images** — set a project's `image:` field, or set `imgCache.__portrait` /
-   `CONFIG.portraitQuery` for the headshot. Best results: a real headshot + the client's
-   actual project shots (great fit for photographers/artists/designers).
-5. **CV download** — point the "Download CV" button at a real PDF:
-   `href="assets/name-cv.pdf" download` (and remove the demo handler).
+- **Navigate:** the `‹ ›` arrows in the showcase bar, the big side arrows (desktop), the
+  dots, or the keyboard **← →** keys.
+- Each "slide" is a **preset** in the `PRESETS` array in `app.js`. Switching a preset
+  re-themes the whole page (accent colour via CSS variables) and re-renders all content.
+- Pexels photos (portrait + work samples) are fetched per preset and cached in
+  `localStorage`, so each example only hits the API once.
+
+## Personalising / selling
+
+**To sell ONE example to a client:**
+1. In `app.js`, set `CAROUSEL_ENABLED = false` (hides the arrows/dots so it’s a normal
+   single site).
+2. Keep just the preset they liked in `PRESETS` (delete the others), or reorder so theirs
+   is first.
+3. Edit that preset’s fields: `name`, `role`, `lede`, `about`, `stats`, `skills`, `work`,
+   `experience`, `quote`, `email`, `location`, and the `accent` colour triple.
+4. **Real images:** give a work item an `image:` path (e.g. `image:"assets/project1.jpg"`)
+   to override Pexels, and replace the headshot by setting that preset’s
+   `portraitQuery` → or drop in a real photo. Best fit: the client’s real headshot + their
+   actual work (great for photographers, designers, architects, artists).
+5. **CV download:** point the "Download CV" button at a real PDF
+   (`href="assets/name-cv.pdf" download`) and remove the demo handler.
+
+**To add another career example:** copy a preset object in `PRESETS`, give it a unique
+`id`, and edit its content + `accent`.
 
 ## Make the contact form deliver
 
-Currently shows a demo confirmation. To receive real messages:
-- **Formspree** (easiest): set the `<form>`'s `action` to your endpoint + `method="post"`,
-  remove the JS submit handler; or
-- **Firebase**: write submissions to a Firestore `messages` collection.
+Currently a demo confirmation. To receive real messages: point the `<form>` at **Formspree**
+(`action` + `method="post"`, remove the JS handler), or write to a **Firebase** Firestore
+`messages` collection.
 
 ## Local preview
 
@@ -36,6 +52,6 @@ python3 -m http.server 5530   # then open http://localhost:5530
 
 ## Notes
 
-- Pexels photos are demo placeholders (free key, same as the other frameworks), cached in
-  `localStorage`. Swap for the client's real images when sold.
+- Pexels photos are demo placeholders (free key, same as the other frameworks). Swap for the
+  client's real images when sold.
 - Hosting upgrade path for paying clients: Netlify / Cloudflare Pages + custom domain.

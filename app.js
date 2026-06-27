@@ -13,7 +13,13 @@
    (set an `image:` on a work item, or replace `portraitQuery`).
    ===================================================================== */
 
-const CONFIG = { pexelsKey: "4SuTxTJkprUsJAP1CZoSkd412wKx4EuXt7xfK5HzZf9DreiCe8Wv0twm" };
+const CONFIG = {
+  pexelsKey: "4SuTxTJkprUsJAP1CZoSkd412wKx4EuXt7xfK5HzZf9DreiCe8Wv0twm",
+  // === LEAD DELIVERY (set before selling) — free key at https://web3forms.com
+  // Enter the client's email, paste the key here. Messages then email the
+  // client. Until set, the form opens the visitor's email app as a fallback.
+  web3formsKey: "YOUR_WEB3FORMS_ACCESS_KEY",
+};
 const CAROUSEL_ENABLED = true;
 
 const PRESETS = [
@@ -455,12 +461,39 @@ $("workGrid").addEventListener("keydown", (e) => { const it = e.target.closest("
 lightbox.addEventListener("click", (e) => { if (e.target !== lightboxImg) closeLightbox(); });
 
 // --- Forms + misc -------------------------------------------------------
-$("contactForm").addEventListener("submit", (e) => {
+const KEY_PLACEHOLDER = "YOUR_WEB3FORMS_ACCESS_KEY";
+$("contactForm").addEventListener("submit", async (e) => {
   e.preventDefault();
-  const name = new FormData(e.target).get("name") || "";
-  e.target.reset();
-  toast(`Thanks ${String(name).split(" ")[0]} — message received! I’ll reply soon.`);
-  $("contactNote").textContent = "Demo: captured locally. Wire to email/Firebase for real delivery (see README).";
+  const form = e.target;
+  const fd = new FormData(form);
+  const firstName = String(fd.get("name") || "there").split(" ")[0];
+  const recipient = currentPreset().email;
+  const btn = form.querySelector('button[type="submit"]');
+
+  if (!CONFIG.web3formsKey || CONFIG.web3formsKey === KEY_PLACEHOLDER) {
+    const subject = encodeURIComponent(`New message from your portfolio — ${fd.get("name") || ""}`);
+    const body = encodeURIComponent([...fd.entries()].filter(([k]) => k !== "botcheck").map(([k, v]) => `${k}: ${v}`).join("\n"));
+    window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+    toast("Opening your email app to send your message…");
+    return;
+  }
+
+  fd.append("access_key", CONFIG.web3formsKey);
+  fd.append("subject", `🔔 NEW MESSAGE — Portfolio contact from ${fd.get("name") || "website"}`);
+  fd.append("from_name", currentPreset().name || "Portfolio");
+  btn.disabled = true; const orig = btn.textContent; btn.textContent = "Sending…";
+  try {
+    const res = await fetch("https://api.web3forms.com/submit", { method: "POST", headers: { Accept: "application/json" }, body: fd });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      form.reset();
+      toast(`Thanks ${firstName} — message received! I’ll reply soon.`);
+      $("contactNote").textContent = "Message sent ✓ — you’ll get a reply by email.";
+    } else { throw new Error(data.message || "Send failed"); }
+  } catch (_) {
+    toast(`Couldn’t send — please email ${recipient}.`);
+    $("contactNote").textContent = `Something went wrong. Please email ${recipient} directly.`;
+  } finally { btn.disabled = false; btn.textContent = orig; }
 });
 $("resumeDownload").addEventListener("click", (e) => { e.preventDefault(); toast("Add the client’s real CV PDF and link it here (see README)."); });
 

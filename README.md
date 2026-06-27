@@ -65,3 +65,14 @@ python3 -m http.server 5530   # then open http://localhost:5530
 - Pexels photos are demo placeholders (free key, same as the other frameworks). Swap for the
   client's real images when sold.
 - Hosting upgrade path for paying clients: Netlify / Cloudflare Pages + custom domain.
+
+## Selling this site to a client (lead delivery)
+
+The contact form is wired to **Web3Forms** so messages email the client.
+
+1. Get a FREE key at [web3forms.com](https://web3forms.com) using the **client's email**.
+2. Paste it into `CONFIG.web3formsKey` in `app.js`.
+3. The fallback recipient uses the active preset's `email` — set that to the client's email too (and trim to their single preset when selling one site).
+4. Test from the live site and confirm the `🔔 NEW MESSAGE` email arrives.
+
+Free tier = 250 submissions/month per key.

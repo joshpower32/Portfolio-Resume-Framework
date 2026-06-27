@@ -364,19 +364,20 @@ function renderWork(p) {
   }).join("");
 }
 async function hydrateWork(p) {
-  for (const w of p.work) {
+  // Parallel fetch so all work images arrive together, not one-by-one.
+  await Promise.all(p.work.map(async (w) => {
     const k = keyFor(p.id, w.id);
-    if (cachedUrl(k)) continue;
+    if (cachedUrl(k)) return;
     try {
       const photo = await fetchPexels(w.query);
-      if (!photo) continue;
+      if (!photo) return;
       imgCache[k] = { url: photo.src.large, photographer: photo.photographer };
       localStorage.setItem(IMG_CACHE_KEY, JSON.stringify(imgCache));
-      if (currentPreset().id !== p.id) continue;
+      if (currentPreset().id !== p.id) return;
       const el = $("workGrid").querySelector(`.work-item[data-id="${w.id}"]`);
       if (el) { el.querySelector("svg, img")?.remove(); el.insertAdjacentHTML("afterbegin", mediaHTML(k, 1, w.title)); el.dataset.full = imgCache[k].url; }
     } catch (_) { /* keep SVG */ }
-  }
+  }));
 }
 async function loadPortrait(p) {
   const el = $("heroPortrait");

@@ -360,7 +360,7 @@ function renderWork(p) {
     const k = keyFor(p.id, w.id);
     return `<figure class="work-item" data-id="${w.id}" data-full="${esc(cachedUrl(k) || "")}" tabindex="0" role="button" aria-label="View ${esc(w.title)}">
       ${mediaHTML(k, i + 1, w.title)}
-      <figcaption class="work-cap"><h3>${esc(w.title)}</h3><span>${esc(w.cat)}</span></figcaption></figure>`;
+      <figcaption class="work-cap"><h3>${esc(w.title)}</h3><span>${esc(w.cat)}</span><span class="work-view">View →</span></figcaption></figure>`;
   }).join("");
 }
 async function hydrateWork(p) {

@@ -27,7 +27,7 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; overflow-x: clip; }
+html { scroll-behavior: smooth; overflow-x: clip; scroll-padding-top: 132px; }
 body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); line-height: 1.65; -webkit-font-smoothing: antialiased; overflow-x: clip; }
 img { max-width: 100%; display: block; }
 a { color: var(--brand-dark); text-decoration: none; }
@@ -190,10 +190,12 @@ h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 600; line-height: 1
 .work-item { position: relative; aspect-ratio: 3 / 2; border-radius: var(--radius); overflow: hidden; cursor: pointer; background: var(--tint); box-shadow: var(--shadow-sm); }
 .work-item svg, .work-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s ease; }
 .work-item:hover img { transform: scale(1.05); }
-.work-cap { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 18px; background: linear-gradient(transparent 45%, rgba(20,18,40,.78)); color: #fff; opacity: 0; transition: opacity .2s ease; }
-.work-item:hover .work-cap, .work-item:focus .work-cap { opacity: 1; }
-.work-cap h3 { color: #fff; margin: 0 0 2px; font-size: 1.1rem; }
-.work-cap span { font-size: .85rem; color: #d8d5f0; }
+/* Caption is always visible (was hover-only — invisible on touch devices) */
+.work-cap { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 18px; background: linear-gradient(transparent 30%, rgba(20,18,40,.55) 65%, rgba(20,18,40,.88)); color: #fff; opacity: 1; }
+.work-cap h3 { color: #fff; margin: 0 0 2px; font-size: 1.1rem; text-shadow: 0 1px 6px rgba(0,0,0,.4); }
+.work-cap span { font-size: .85rem; color: #e7e5f6; }
+.work-cap .work-view { margin-top: 8px; font-size: .78rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #fff; opacity: 0; transform: translateY(6px); transition: opacity .2s ease, transform .2s ease; }
+.work-item:hover .work-view, .work-item:focus .work-view { opacity: 1; transform: translateY(0); }
 
 /* ---------- Resume timeline ---------- */
 .resume-wrap { max-width: 760px; }
@@ -253,9 +255,11 @@ h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 600; line-height: 1
     .nav-links { position: absolute; top: 68px; left: 0; right: 0; flex-direction: column; gap: 0; background: var(--surface); border-bottom: 1px solid var(--line); margin: 0; padding: 6px 0; transform: scaleY(0); transform-origin: top; transition: transform .18s ease; box-shadow: var(--shadow-md); }
     .nav-links.open { transform: scaleY(1); }
     .nav-links a { padding: 13px 22px; border-top: 1px solid var(--line); }
-    .hero-grid { grid-template-columns: 1fr; gap: 32px; }
-    .hero-portrait { max-width: 320px; order: -1; }
-    .style-classic .hero-grid { grid-template-columns: 1fr; }
+    .hero-grid { grid-template-columns: 1fr; gap: 28px; text-align: center; }
+    .hero-text .lede { margin-left: auto; margin-right: auto; }
+    .hero-actions, .socials { justify-content: center; }
+    .hero-portrait { width: 240px; max-width: 70vw; margin: 0 auto; order: -1; }
+    .style-classic .hero-grid, .style-minimal .hero-grid { grid-template-columns: 1fr; }
     .about-grid { grid-template-columns: 1fr; gap: 30px; }
     .contact-grid { grid-template-columns: 1fr; gap: 28px; }
 }

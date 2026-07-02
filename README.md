@@ -26,8 +26,9 @@ frameworks.
   dots, or the keyboard **← →** keys.
 - Each "slide" is a **preset** in the `PRESETS` array in `app.js`. Switching a preset
   re-themes the whole page (accent colour via CSS variables) and re-renders all content.
-- Pexels photos (portrait + work samples) are fetched per preset and cached in
-  `localStorage`, so each example only hits the API once.
+- Photos (portrait + work samples) are pinned Pexels images — direct URLs in the
+  `PEXELS_PHOTOS` map in `app.js`, so every preset loads instantly with no API key
+  or runtime fetching.
 
 ## Personalising / selling
 
@@ -62,8 +63,10 @@ python3 -m http.server 5530   # then open http://localhost:5530
 
 ## Notes
 
-- Pexels photos are demo placeholders (free key, same as the other frameworks). Swap for the
-  client's real images when sold.
+- Demo photos are pinned Pexels images — direct URLs in the `PEXELS_PHOTOS` map in
+  `app.js`, so they load instantly with no API key or runtime fetching. To change a
+  photo, paste a new pexels.com image address into the map; swap in the client's real
+  photos (an `image:` path per item) when sold.
 - Hosting upgrade path for paying clients: Netlify / Cloudflare Pages + custom domain.
 
 ## Selling this site to a client (lead delivery)

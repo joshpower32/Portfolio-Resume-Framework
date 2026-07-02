@@ -14,7 +14,6 @@
    ===================================================================== */
 
 const CONFIG = {
-  pexelsKey: "4SuTxTJkprUsJAP1CZoSkd412wKx4EuXt7xfK5HzZf9DreiCe8Wv0twm",
   // === LEAD DELIVERY (set before selling) — free key at https://web3forms.com
   // Enter the client's email, paste the key here. Messages then email the
   // client. Until set, the form opens the visitor's email app as a fallback.
@@ -289,23 +288,92 @@ function placeholderSVG(seed = 0) {
     <circle cx="150" cy="100" r="22" fill="hsl(${h},55%,60%)" opacity=".8"/></svg>`;
 }
 
-// --- Pexels image cache (keyed per preset) ------------------------------
-const IMG_CACHE_KEY = "portfolio_imgcache";
-let imgCache = JSON.parse(localStorage.getItem(IMG_CACHE_KEY) || "{}");
-const keyFor = (presetId, itemId) => `${presetId}:${itemId}`;
-const cachedUrl = (k) => imgCache[k]?.url || null;
+// --- Demo photos: pinned Pexels shots, keyed by each item's `query` -----
+// Direct image URLs load with the page — no API call, no key, no pop-in.
+// To change a photo: browse pexels.com, copy the image address, paste here.
+const PEXELS_PHOTOS = {
+  "mobile app design": { u: "https://images.pexels.com/photos/8829445/pexels-photo-8829445.jpeg", p: "Brett Jordan" },
+  "dashboard ui": { u: "https://images.pexels.com/photos/27141307/pexels-photo-27141307.jpeg", p: "Egor Komarov" },
+  "coffee brand packaging": { u: "https://images.pexels.com/photos/4829083/pexels-photo-4829083.jpeg", p: "cottonbro studio" },
+  "design system components": { u: "https://images.pexels.com/photos/12913577/pexels-photo-12913577.jpeg", p: "Bijsmans Fotografie" },
+  "website design laptop": { u: "https://images.pexels.com/photos/285814/pexels-photo-285814.jpeg", p: "Tranmautritam" },
+  "logo branding mockup": { u: "https://images.pexels.com/photos/26576975/pexels-photo-26576975.jpeg", p: "Solomon Essien" },
+  "code on screen": { u: "https://images.pexels.com/photos/27427258/pexels-photo-27427258.jpeg", p: "Seraphfim Gallery" },
+  "data dashboard analytics": { u: "https://images.pexels.com/photos/97080/pexels-photo-97080.jpeg", p: "Negative Space" },
+  "mobile app development": { u: "https://images.pexels.com/photos/20694602/pexels-photo-20694602.png", p: "_Karub_ ‎" },
+  "software development team": { u: "https://images.pexels.com/photos/6804068/pexels-photo-6804068.jpeg", p: "cottonbro studio" },
+  "server room data center": { u: "https://images.pexels.com/photos/37730212/pexels-photo-37730212.jpeg", p: "panumas nikhomkhai" },
+  "cybersecurity laptop": { u: "https://images.pexels.com/photos/5935794/pexels-photo-5935794.jpeg", p: "Sora Shimazaki" },
+  "wedding photography": { u: "https://images.pexels.com/photos/13434418/pexels-photo-13434418.jpeg", p: "Jonathan Nenemann" },
+  "engagement couple photoshoot": { u: "https://images.pexels.com/photos/11822777/pexels-photo-11822777.jpeg", p: "Hüseyin DERYA" },
+  "portrait photography studio": { u: "https://images.pexels.com/photos/29057425/pexels-photo-29057425.jpeg", p: "Airam Dato-on" },
+  "wedding bouquet bride": { u: "https://images.pexels.com/photos/5791588/pexels-photo-5791588.jpeg", p: "Luis Becerra  Fotógrafo" },
+  "family portrait outdoor": { u: "https://images.pexels.com/photos/19052057/pexels-photo-19052057.jpeg", p: "Patricio Ledeill" },
+  "wedding reception party": { u: "https://images.pexels.com/photos/13434437/pexels-photo-13434437.jpeg", p: "Jonathan Nenemann" },
+  "brand strategy meeting": { u: "https://images.pexels.com/photos/7688430/pexels-photo-7688430.jpeg", p: "Kindel Media" },
+  "marketing campaign": { u: "https://images.pexels.com/photos/15635245/pexels-photo-15635245.jpeg", p: "Walls.io" },
+  "social media content creation": { u: "https://images.pexels.com/photos/6956303/pexels-photo-6956303.jpeg", p: "Eva Bronzini" },
+  "email marketing laptop": { u: "https://images.pexels.com/photos/16675632/pexels-photo-16675632.jpeg", p: "Shoper .pl" },
+  "brand guidelines book": { u: "https://images.pexels.com/photos/8532965/pexels-photo-8532965.jpeg", p: "Hanna Pad" },
+  "influencer phone camera": { u: "https://images.pexels.com/photos/6964949/pexels-photo-6964949.jpeg", p: "cottonbro studio" },
+  "modern architecture house": { u: "https://images.pexels.com/photos/17017618/pexels-photo-17017618.jpeg", p: "Igor Passchier" },
+  "interior design living room": { u: "https://images.pexels.com/photos/29012619/pexels-photo-29012619.jpeg", p: "Beyza Kılıçdere" },
+  "office interior design": { u: "https://images.pexels.com/photos/7511755/pexels-photo-7511755.jpeg", p: "Max Vakhtbovych" },
+  "architecture model": { u: "https://images.pexels.com/photos/35630638/pexels-photo-35630638.jpeg", p: "Blackcurrant Great" },
+  "minimalist kitchen interior": { u: "https://images.pexels.com/photos/7045356/pexels-photo-7045356.jpeg", p: "Max Vakhtbovych" },
+  "building facade architecture": { u: "https://images.pexels.com/photos/38000582/pexels-photo-38000582.png", p: "Phát Trương" },
+  "hospital corridor": { u: "https://images.pexels.com/photos/6129870/pexels-photo-6129870.jpeg", p: "RDNE Stock project" },
+  "healthcare community": { u: "https://images.pexels.com/photos/5327578/pexels-photo-5327578.jpeg", p: "Thirdman" },
+  "nurse team meeting": { u: "https://images.pexels.com/photos/33642015/pexels-photo-33642015.jpeg", p: "DΛVΞ GΛRCIΛ" },
+  "hospital ward": { u: "https://images.pexels.com/photos/7335565/pexels-photo-7335565.jpeg", p: "supplier gorden  ready stok minimalis" },
+  "medical consultation": { u: "https://images.pexels.com/photos/7088834/pexels-photo-7088834.jpeg", p: "MART  PRODUCTION" },
+  "nurse station hospital": { u: "https://images.pexels.com/photos/6129594/pexels-photo-6129594.jpeg", p: "RDNE Stock project" },
+  "music studio mixer": { u: "https://images.pexels.com/photos/8132717/pexels-photo-8132717.jpeg", p: "Anna Pou" },
+  "dj concert lights": { u: "https://images.pexels.com/photos/9005458/pexels-photo-9005458.jpeg", p: "Yan Krukau" },
+  "recording studio": { u: "https://images.pexels.com/photos/7086732/pexels-photo-7086732.jpeg", p: "cottonbro studio" },
+  "vinyl turntable": { u: "https://images.pexels.com/photos/26315454/pexels-photo-26315454.jpeg", p: "Mete Kaan Özdilek" },
+  "music festival crowd": { u: "https://images.pexels.com/photos/12657546/pexels-photo-12657546.jpeg", p: "James Frid" },
+  "synthesizer keyboard": { u: "https://images.pexels.com/photos/10148872/pexels-photo-10148872.jpeg", p: "TStudio" },
+  "fine dining plate": { u: "https://images.pexels.com/photos/7627408/pexels-photo-7627408.jpeg", p: "Taha Samet Arslan" },
+  "catering buffet food": { u: "https://images.pexels.com/photos/2337843/pexels-photo-2337843.jpeg", p: "Vidal Balielo Jr." },
+  "fresh pasta": { u: "https://images.pexels.com/photos/6748860/pexels-photo-6748860.jpeg", p: "Grooveland Designs" },
+  "wedding dinner table": { u: "https://images.pexels.com/photos/29040997/pexels-photo-29040997.jpeg", p: "Jonathan Borba" },
+  "plated dessert": { u: "https://images.pexels.com/photos/16544183/pexels-photo-16544183.jpeg", p: "Bernhard HAGEN" },
+  "chef plating food": { u: "https://images.pexels.com/photos/36430088/pexels-photo-36430088.jpeg", p: "Willians Huerta" },
+  "magazine article": { u: "https://images.pexels.com/photos/4467632/pexels-photo-4467632.jpeg", p: "www.kaboompics.com" },
+  "notebook writing": { u: "https://images.pexels.com/photos/37860169/pexels-photo-37860169.jpeg", p: "jessica olivella" },
+  "open book pages": { u: "https://images.pexels.com/photos/34260873/pexels-photo-34260873.jpeg", p: "Veronika Andrews" },
+  "laptop writing coffee": { u: "https://images.pexels.com/photos/6393017/pexels-photo-6393017.jpeg", p: "William  Fortunato" },
+  "typography design": { u: "https://images.pexels.com/photos/6005072/pexels-photo-6005072.jpeg", p: "DS stories" },
+  "stack of books": { u: "https://images.pexels.com/photos/1383379/pexels-photo-1383379.jpeg", p: "Suzy Hazelwood" },
+  "weight training gym": { u: "https://images.pexels.com/photos/4464780/pexels-photo-4464780.jpeg", p: "Brett Jordan" },
+  "home workout": { u: "https://images.pexels.com/photos/6496094/pexels-photo-6496094.jpeg", p: "Gustavo Fring" },
+  "group fitness class": { u: "https://images.pexels.com/photos/6339401/pexels-photo-6339401.jpeg", p: "Pavel Danilyuk" },
+  "stretching mobility": { u: "https://images.pexels.com/photos/8413737/pexels-photo-8413737.jpeg", p: "Joni Tuohimaa" },
+  "healthy meal prep": { u: "https://images.pexels.com/photos/7964650/pexels-photo-7964650.jpeg", p: "Kampus Production" },
+  "outdoor workout park": { u: "https://images.pexels.com/photos/14925388/pexels-photo-14925388.jpeg", p: "Atlantic Ambience" },
+  "professional portrait man": { u: "https://images.pexels.com/photos/34299170/pexels-photo-34299170.jpeg", p: "Moisés Sánchez" },
+  "software developer portrait": { u: "https://images.pexels.com/photos/5483147/pexels-photo-5483147.jpeg", p: "cottonbro studio" },
+  "female photographer portrait": { u: "https://images.pexels.com/photos/9629927/pexels-photo-9629927.jpeg", p: "Ivan S" },
+  "businessman portrait professional": { u: "https://images.pexels.com/photos/37842959/pexels-photo-37842959.jpeg", p: "Julien Realtor" },
+  "architect woman portrait": { u: "https://images.pexels.com/photos/11174192/pexels-photo-11174192.jpeg", p: "TUBARONES PHOTOGRAPHY" },
+  "nurse portrait professional": { u: "https://images.pexels.com/photos/5430213/pexels-photo-5430213.jpeg", p: "Wundef Media" },
+  "dj music producer": { u: "https://images.pexels.com/photos/7446865/pexels-photo-7446865.jpeg", p: "Gustavo Fring" },
+  "chef portrait kitchen": { u: "https://images.pexels.com/photos/4253298/pexels-photo-4253298.jpeg", p: "cottonbro studio" },
+  "writer portrait desk": { u: "https://images.pexels.com/photos/4199735/pexels-photo-4199735.jpeg", p: "medium photoclub" },
+  "fitness trainer portrait": { u: "https://images.pexels.com/photos/13451904/pexels-photo-13451904.jpeg", p: "Instituto Alpha  Fitness" },
+};
+// Size an image via Pexels CDN params (w = target width in px)
+const px = (u, w) => `${u}?auto=compress&cs=tinysrgb&w=${w}`;
 
-async function fetchPexels(query, orientation = "landscape") {
-  const res = await fetch(
-    `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=1&orientation=${orientation}`,
-    { headers: { Authorization: CONFIG.pexelsKey } });
-  if (!res.ok) return null;
-  return (await res.json()).photos?.[0] || null;
-}
-function mediaHTML(k, fallbackSeed, title) {
-  const url = cachedUrl(k);
-  const credit = imgCache[k]?.photographer;
-  if (url) return `<img src="${esc(url)}" alt="${esc(title)}"${credit ? ` title="Photo: ${esc(credit)} / Pexels"` : ""} loading="lazy">`;
+// --- Work imagery: real photo > pinned Pexels photo > SVG fallback ------
+const workImage = (w, width = 800) =>
+  w.image || (PEXELS_PHOTOS[w.query] ? px(PEXELS_PHOTOS[w.query].u, width) : null);
+
+function mediaHTML(w, fallbackSeed) {
+  const url = workImage(w);
+  const credit = !w.image && PEXELS_PHOTOS[w.query]?.p;
+  if (url) return `<img src="${esc(url)}" alt="${esc(w.title)}"${credit ? ` title="Photo: ${esc(credit)} / Pexels"` : ""} loading="lazy" onerror="this.outerHTML = placeholderSVG(${fallbackSeed})">`;
   return placeholderSVG(fallbackSeed);
 }
 
@@ -350,7 +418,6 @@ function renderPreset(p) {
   renderFilters(p);
   renderWork(p);
   loadPortrait(p);
-  hydrateWork(p);
 }
 
 function renderFilters(p) {
@@ -362,42 +429,18 @@ function renderFilters(p) {
 }
 function renderWork(p) {
   const list = p.work.filter((w) => activeCat === "All" || w.cat === activeCat);
-  $("workGrid").innerHTML = list.map((w, i) => {
-    const k = keyFor(p.id, w.id);
-    return `<figure class="work-item" data-id="${w.id}" data-full="${esc(cachedUrl(k) || "")}" tabindex="0" role="button" aria-label="View ${esc(w.title)}">
-      ${mediaHTML(k, i + 1, w.title)}
-      <figcaption class="work-cap"><h3>${esc(w.title)}</h3><span>${esc(w.cat)}</span><span class="work-view">View →</span></figcaption></figure>`;
-  }).join("");
+  $("workGrid").innerHTML = list.map((w, i) =>
+    `<figure class="work-item" data-id="${w.id}" data-full="${esc(workImage(w, 1600) || "")}" tabindex="0" role="button" aria-label="View ${esc(w.title)}">
+      ${mediaHTML(w, i + 1)}
+      <figcaption class="work-cap"><h3>${esc(w.title)}</h3><span>${esc(w.cat)}</span><span class="work-view">View →</span></figcaption></figure>`
+  ).join("");
 }
-async function hydrateWork(p) {
-  // Parallel fetch so all work images arrive together, not one-by-one.
-  await Promise.all(p.work.map(async (w) => {
-    const k = keyFor(p.id, w.id);
-    if (cachedUrl(k)) return;
-    try {
-      const photo = await fetchPexels(w.query);
-      if (!photo) return;
-      imgCache[k] = { url: photo.src.large, photographer: photo.photographer };
-      localStorage.setItem(IMG_CACHE_KEY, JSON.stringify(imgCache));
-      if (currentPreset().id !== p.id) return;
-      const el = $("workGrid").querySelector(`.work-item[data-id="${w.id}"]`);
-      if (el) { el.querySelector("svg, img")?.remove(); el.insertAdjacentHTML("afterbegin", mediaHTML(k, 1, w.title)); el.dataset.full = imgCache[k].url; }
-    } catch (_) { /* keep SVG */ }
-  }));
-}
-async function loadPortrait(p) {
+function loadPortrait(p) {
   const el = $("heroPortrait");
-  const k = keyFor(p.id, "__portrait");
-  if (cachedUrl(k)) { el.style.backgroundImage = `url("${cachedUrl(k)}")`; return; }
-  el.style.backgroundImage = "";
-  try {
-    const photo = await fetchPexels(p.portraitQuery, "portrait");
-    if (photo) {
-      imgCache[k] = { url: photo.src.large, photographer: photo.photographer };
-      localStorage.setItem(IMG_CACHE_KEY, JSON.stringify(imgCache));
-      if (currentPreset().id === p.id) el.style.backgroundImage = `url("${photo.src.large}")`;
-    }
-  } catch (_) { /* gradient stays */ }
+  const ph = PEXELS_PHOTOS[p.portraitQuery];
+  el.style.backgroundImage = p.portrait
+    ? `url("${p.portrait}")`
+    : ph ? `url("${px(ph.u, 800)}")` : "";
 }
 
 // --- Carousel -----------------------------------------------------------
